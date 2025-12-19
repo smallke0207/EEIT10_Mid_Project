@@ -1,0 +1,229 @@
+/* 全域與標題 */
+h1 {
+    font-family: 'Noto Sans TC', sans-serif;
+    color: white;
+    text-align: center;
+    font-size: 36px;
+    text-shadow: 2px 2px 2px black;
+    margin-top: 10px;
+}
+
+body {
+    background: url("img/01_一般/maplestory_bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    text-align: center;
+    padding: 20px;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* 遊戲盤面 */
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 卡片設計 */
+.card-container { perspective: 800px; }
+
+.card-inner {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.card-inner.flipped { transform: rotateY(180deg); }
+
+.card-inner:hover:not(.flipped):not(.matched) {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.4);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    border: 5px solid pink;
+    overflow: hidden;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+}
+
+.card-front {
+    background: #ffe4e1;
+    transform: rotateY(180deg);
+}
+
+.card-front img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.card-back {
+    background: #da69dc;
+    background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* 狀態反饋 */
+.card-inner.success { animation: success-glow 0.8s ease; }
+@keyframes success-glow {
+    0%, 100% { box-shadow: 0 0 5px 2px rgba(255,255,0,0.8); }
+    50% { box-shadow: 0 0 25px 10px rgba(255,215,0,1); }
+}
+
+.card-inner.fail { animation: fail-glow 0.6s ease; }
+@keyframes fail-glow {
+    0%, 100% { box-shadow: 0 0 5px 2px rgba(255,0,0,0.8); }
+    50% { box-shadow: 0 0 20px 8px rgba(255,0,0,1); }
+}
+
+/* 倒數計時 */
+#countdown {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);            
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 400px;
+    color: #ffeb3b;
+    text-shadow: 4px 4px 0 #000, 6px 6px 0 #ff9800;
+    display: none;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;                
+}
+
+.countdown-animate { animation: kartCount 1s ease forwards; }
+@keyframes kartCount {
+    0% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+    40% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+}
+
+/* 更換場景按鈕 */
+.scene-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a367e7 0%, #7b2cbf 100%);
+    color: white;
+    font-size: 2.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    user-select: none;
+}
+
+.scene-btn:hover {
+    background: linear-gradient(135deg, #b388eb 0%, #9d4edd 100%);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.8), 0 6px 20px rgba(0, 0, 0, 0.4);
+    border-color: #fff;
+}
+
+.scene-btn:active { transform: translateY(-50%) scale(0.95); }
+.left-btn { left: 30px; padding-right: 5px; }
+.right-btn { right: 30px; padding-left: 5px; }
+
+/* 狀態欄 UI */
+#stats {
+    position: absolute; top: 20px; left: 20px;
+    display: flex; flex-direction: column; gap: 5px;
+    font-size: 1.1rem; font-weight: bold; color: #fff;
+    background: rgba(0, 0, 0, 0.6); padding: 10px 15px; border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* 按鈕樣式 */
+.btn-custom { border: none; border-radius: 12px; font-weight: bold; padding: 10px 20px; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s ease; }
+.btn-start { background: linear-gradient(45deg, #28a745, #5be584); }
+.btn-start:hover { transform: scale(1.05); }
+.btn-pause { background: linear-gradient(45deg, #ffc107, #ffdd57); color: #333; }
+.btn-pause:hover { transform: scale(1.05); }
+.btn-settings { background: linear-gradient(45deg, #6f42c1, #b36bff); }
+.btn-settings:hover { transform: scale(1.05); }
+
+/* Modal 樣式 */
+.modal-content {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 6px solid #8304a3;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Noto Sans TC', sans-serif;
+    color: #333;
+}
+
+.modal-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #8304a3;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.modal-body p, .modal-body span { font-size: 20px; color: #555; }
+
+/* Modal 內部按鈕 */
+#playAgainWinBtn, #playAgainFailBtn {
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
+    color: white; border: none; border-radius: 12px;
+}
+
+#continueBtn {
+    background: linear-gradient(45deg, #32cd32, #00ff7f);
+    color: white; border: none; border-radius: 12px;
+}
+
+#giveUpBtn {
+    background: linear-gradient(45deg, #ff4500, #ff6347);
+    color: white; border: none; border-radius: 12px;
+}
+
+/* Modal 動畫效果 */
+.modal.fade .modal-dialog {
+    transform: scale(0.7);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.modal.fade.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* 設定 Modal 特殊處理 */
+#settingsModal { z-index: 10000 !important; }
+#volumeSlider { width: 150px; accent-color: #8304a3; }
+
+/* 場景外層 */
+#sceneWrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease;
+}
+
+.lottie-effect {
+    position: absolute; top: -20px; left: -20px;
+    width: 140px; height: 140px; pointer-events: none; z-index: 10;
+}
